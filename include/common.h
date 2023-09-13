@@ -1,0 +1,2 @@
+#define ALLOC_BLOCK 32
+#define STRING_BASE_SIZE 1024
