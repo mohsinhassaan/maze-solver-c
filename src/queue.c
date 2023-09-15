@@ -42,3 +42,10 @@ void push(Queue *q, size_t val) {
 
   ++q->size;
 }
+
+void deleteQueue(Queue *q) {
+  while (q->size != 0) {
+    pop(q);
+  }
+  free(q);
+}

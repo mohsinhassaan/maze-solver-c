@@ -14,3 +14,4 @@ typedef struct Queue {
 Queue *createQueue();
 size_t pop(Queue *q);
 void push(Queue *q, size_t val);
+void deleteQueue(Queue *q);

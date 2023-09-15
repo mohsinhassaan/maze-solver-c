@@ -158,6 +158,8 @@ int write_image(const char *in_image_file, const char *out_image_file,
   int result =
       stbi_write_bmp(out_image_file, width, height, channels, imageData);
 
+  stbi_image_free(imageData);
+
   if (!result) {
     fprintf(stderr, "Error writing image to %s\n", out_image_file);
   }

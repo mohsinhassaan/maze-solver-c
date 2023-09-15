@@ -55,9 +55,9 @@ int add_undirected_edge(Graph *g, size_t source, size_t dest) {
   EdgeList *sourceEdgeList = g->adjacencyList + source;
 
   while (sourceEdgeList->edge_count >= sourceEdgeList->max_edges) {
-    sourceEdgeList->targets =
-        realloc(sourceEdgeList->targets, ALLOC_BLOCK * sizeof(Vertex));
     sourceEdgeList->max_edges += ALLOC_BLOCK;
+    sourceEdgeList->targets = realloc(
+        sourceEdgeList->targets, sourceEdgeList->max_edges * sizeof(Vertex));
   }
 
   EdgeList *destEdgeList = g->adjacencyList + dest;
@@ -110,6 +110,9 @@ Path *shortest_path(const Graph *g, size_t source, size_t dest) {
     }
   }
 
+  deleteQueue(q);
+  free(explored);
+
   if (found) {
     size_t *path_vertices = malloc(ALLOC_BLOCK * sizeof(size_t));
     size_t path_size = 0;
@@ -120,12 +123,14 @@ Path *shortest_path(const Graph *g, size_t source, size_t dest) {
 
     while (prev[crawl] != -1) {
       while (path_size >= allocated_size) {
-        path_vertices = realloc(path_vertices, ALLOC_BLOCK * sizeof(size_t));
         allocated_size += ALLOC_BLOCK;
+        path_vertices = realloc(path_vertices, allocated_size * sizeof(size_t));
       }
       crawl = prev[crawl];
       path_vertices[path_size++] = crawl;
     }
+
+    free(prev);
 
     Path *path = malloc(sizeof(Path));
     path->size = path_size;
